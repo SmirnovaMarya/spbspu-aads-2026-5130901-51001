@@ -72,7 +72,7 @@ namespace smirnova
       List() {
         for (LCIter<T> it = other.cbegin(); it.valid(); it.next())
         {
-          push_back(it.value());
+          pushBack(it.value());
         }
     }
 
@@ -116,6 +116,14 @@ namespace smirnova
       std::swap(count, other.count);
     }
 
+    Node<T>* frontNode()
+    {
+      return sentinel->next;
+    }
+    Node<T>* backNode()
+    {
+      return sentinel->prev;
+    }
     bool empty() const noexcept
     {
       return count == 0;
