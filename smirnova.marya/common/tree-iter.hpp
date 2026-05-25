@@ -1,12 +1,14 @@
+#pragma once
 #ifndef TREEITERATORS_HPP
 #define TREEITERATORS_HPP
 
 #include <stdexcept>
 #include <utility>
 
+#include "bstree.hpp"
+
 namespace smirnova
 {
-  struct TreeNodeBase;
 
   template< class Key, class Value >
   struct TreeNode;
