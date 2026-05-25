@@ -4,13 +4,13 @@
 #include <stdexcept>
 #include <utility>
 
+// `TreeNodeBase` defined in `bstree.hpp`; included by TUs that include this file
+
 namespace smirnova
 {
-  template< class Key, class Value >
-  struct Node;
+  
 
-  template< class NodeT >
-  NodeT* nextNode(NodeT* node, NodeT* fake)
+  TreeNodeBase* nextNodeBase(TreeNodeBase* node, TreeNodeBase* fake)
   {
     if (node->right_ != fake)
     {
@@ -24,7 +24,7 @@ namespace smirnova
       return node;
     }
 
-    NodeT* parent = node->parent_;
+    TreeNodeBase* parent = node->parent_;
 
     while (parent != fake && node == parent->right_)
     {
@@ -49,7 +49,7 @@ namespace smirnova
       fake_(nullptr)
     {}
 
-    BSTIterator(NodeT* current, NodeT* fake):
+    BSTIterator(TreeNodeBase* current, TreeNodeBase* fake):
       current_(current),
       fake_(fake)
     {}
@@ -61,19 +61,19 @@ namespace smirnova
         throw std::runtime_error("bad iterator");
       }
 
-      return current_->data_;
+      return static_cast< NodeT* >(current_)->data_;
     }
 
     std::pair< Key, Value >* operator->() const
     {
-      return &current_->data_;
+      return &static_cast< NodeT* >(current_)->data_;
     }
 
     BSTIterator& operator++()
     {
       if (current_ != fake_)
       {
-        current_ = nextNode(current_, fake_);
+        current_ = nextNodeBase(current_, fake_);
       }
 
       return *this;
@@ -97,8 +97,8 @@ namespace smirnova
     }
 
   private:
-    NodeT* current_;
-    NodeT* fake_;
+    TreeNodeBase* current_;
+    TreeNodeBase* fake_;
 
     template< class K, class V >
     friend class BSTConstIterator;
@@ -118,7 +118,7 @@ namespace smirnova
       fake_(nullptr)
     {}
 
-    BSTConstIterator(const NodeT* current, const NodeT* fake):
+    BSTConstIterator(const TreeNodeBase* current, const TreeNodeBase* fake):
       current_(current),
       fake_(fake)
     {}
@@ -135,23 +135,19 @@ namespace smirnova
         throw std::runtime_error("bad iterator");
       }
 
-      return current_->data_;
+      return static_cast< const NodeT* >(current_)->data_;
     }
 
     const std::pair< Key, Value >* operator->() const
     {
-      return &current_->data_;
+      return &static_cast< const NodeT* >(current_)->data_;
     }
 
     BSTConstIterator& operator++()
     {
       if (current_ != fake_)
       {
-        current_ =
-          nextNode(
-            const_cast< NodeT* >(current_),
-            const_cast< NodeT* >(fake_)
-          );
+        current_ = nextNodeBase(const_cast< TreeNodeBase* >(current_), const_cast< TreeNodeBase* >(fake_));
       }
 
       return *this;
@@ -175,8 +171,8 @@ namespace smirnova
     }
 
   private:
-    const NodeT* current_;
-    const NodeT* fake_;
+    const TreeNodeBase* current_;
+    const TreeNodeBase* fake_;
 
     template< class K, class V >
     friend class BSTree;
@@ -184,3 +180,4 @@ namespace smirnova
 }
 
 #endif
+
