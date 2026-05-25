@@ -7,7 +7,7 @@
 
 namespace smirnova
 {
-  template<class Predicate>
+	template< class Predicate >
   Dict buildDict(const Dict& source, Predicate predicate)
   {
     Dict result;

@@ -17,7 +17,7 @@ namespace smirnova
     return tmp;
   }
 
-  TreeNodeBase* getMin(TreeNodeBase* node, TreeNodeBase* fake)
+  inline TreeNodeBase* getMin(TreeNodeBase* node, TreeNodeBase* fake)
   {
     while (node->left_ != fake)
     {

@@ -11,8 +11,7 @@ namespace smirnova
   template< class Key, class Value >
   struct TreeNode;
 
-  
-  smirnova::TreeNodeBase* nextNodeBase(smirnova::TreeNodeBase* node, smirnova::TreeNodeBase* fake)
+  inline smirnova::TreeNodeBase* nextNodeBase(smirnova::TreeNodeBase* node, smirnova::TreeNodeBase* fake)
   {
     if (node->right_ != fake)
     {
