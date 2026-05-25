@@ -10,176 +10,170 @@
 namespace smirnova
 {
 
-  template< class Key, class Value >
-  struct TreeNode;
+// =========================
+// forward decl (уже есть в bstree.hpp, но безопасно)
+// =========================
+struct TreeNodeBase;
 
-  inline smirnova::TreeNodeBase* nextNodeBase(smirnova::TreeNodeBase* node, smirnova::TreeNodeBase* fake)
+class BSTConstIterator;
+
+// =========================
+// NEXT NODE (INORDER SUCCESSOR)
+// =========================
+inline TreeNodeBase* nextNodeBase(TreeNodeBase* node, TreeNodeBase* fake)
+{
+  if (node == fake)
+    return fake;
+
+  if (node->right_ != fake)
   {
-    if (node->right_ != fake)
-    {
-      node = node->right_;
-
-      while (node->left_ != fake)
-      {
-        node = node->left_;
-      }
-
-      return node;
-    }
-
-    smirnova::TreeNodeBase* parent = node->parent_;
-
-    while (parent != fake && node == parent->right_)
-    {
-      node = parent;
-      parent = parent->parent_;
-    }
-
-    return parent;
+    node = node->right_;
+    while (node->left_ != fake)
+      node = node->left_;
+    return node;
   }
 
-  template< class Key, class Value >
-  class BSTConstIterator;
+  TreeNodeBase* parent = node->parent_;
 
-  template< class Key, class Value >
-  class BSTIterator
+  while (parent != fake && node == parent->right_)
   {
-  public:
-    using NodeT = TreeNode< Key, Value >;
+    node = parent;
+    parent = parent->parent_;
+  }
 
-    BSTIterator():
-      current_(nullptr),
-      fake_(nullptr)
-    {}
+  return parent;
+}
 
-    BSTIterator(smirnova::TreeNodeBase* current, smirnova::TreeNodeBase* fake):
-      current_(current),
-      fake_(fake)
-    {}
+// =========================
+// ITERATOR
+// =========================
+template< class Key, class Value >
+class BSTIterator
+{
+public:
+  using NodeT = TreeNode<Key, Value>;
 
-    std::pair< Key, Value >& operator*() const
-    {
-      if (current_ == fake_)
-      {
-        throw std::runtime_error("bad iterator");
-      }
+  BSTIterator() : current_(nullptr), fake_(nullptr) {}
 
-      return static_cast< NodeT* >(current_)->data_;
-    }
+  BSTIterator(TreeNodeBase* current, TreeNodeBase* fake)
+    : current_(current), fake_(fake) {}
 
-    std::pair< Key, Value >* operator->() const
-    {
-      return &static_cast< NodeT* >(current_)->data_;
-    }
-
-    BSTIterator& operator++()
-    {
-      if (current_ != fake_)
-      {
-        current_ = nextNodeBase(current_, fake_);
-      }
-
-      return *this;
-    }
-
-    BSTIterator operator++(int)
-    {
-      BSTIterator temp(*this);
-      ++(*this);
-      return temp;
-    }
-
-    bool operator==(const BSTIterator& other) const noexcept
-    {
-      return current_ == other.current_;
-    }
-
-    bool operator!=(const BSTIterator& other) const noexcept
-    {
-      return !(*this == other);
-    }
-
-  private:
-    smirnova::TreeNodeBase* current_;
-    smirnova::TreeNodeBase* fake_;
-
-    template< class K, class V >
-    friend class BSTConstIterator;
-
-    template< class K, class V, class C >
-    friend class BSTree;
-  };
-
-  template< class Key, class Value >
-  class BSTConstIterator
+  std::pair<Key, Value>& operator*() const
   {
-  public:
-    using NodeT = TreeNode< Key, Value >;
+    if (current_ == fake_)
+      throw std::runtime_error("bad iterator");
 
-    BSTConstIterator():
-      current_(nullptr),
-      fake_(nullptr)
-    {}
+    return static_cast<NodeT*>(current_)->data_;
+  }
 
-    BSTConstIterator(const smirnova::TreeNodeBase* current, const smirnova::TreeNodeBase* fake):
-      current_(current),
-      fake_(fake)
-    {}
+  std::pair<Key, Value>* operator->() const
+  {
+    return &static_cast<NodeT*>(current_)->data_;
+  }
 
-    BSTConstIterator(const BSTIterator< Key, Value >& other):
-      current_(other.current_),
-      fake_(other.fake_)
-    {}
+  BSTIterator& operator++()
+  {
+    if (current_ != fake_)
+      current_ = nextNodeBase(current_, fake_);
 
-    const std::pair< Key, Value >& operator*() const
-    {
-      if (current_ == fake_)
-      {
-        throw std::runtime_error("bad iterator");
-      }
+    return *this;
+  }
 
-      return static_cast< const NodeT* >(current_)->data_;
-    }
+  BSTIterator operator++(int)
+  {
+    BSTIterator tmp(*this);
+    ++(*this);
+    return tmp;
+  }
 
-    const std::pair< Key, Value >* operator->() const
-    {
-      return &static_cast< const NodeT* >(current_)->data_;
-    }
+  bool operator==(const BSTIterator& other) const noexcept
+  {
+    return current_ == other.current_;
+  }
 
-    BSTConstIterator& operator++()
-    {
-      if (current_ != fake_)
-      {
-        current_ = nextNodeBase(const_cast< TreeNodeBase* >(current_), const_cast< TreeNodeBase* >(fake_));
-      }
+  bool operator!=(const BSTIterator& other) const noexcept
+  {
+    return !(*this == other);
+  }
 
-      return *this;
-    }
+private:
+  TreeNodeBase* current_;
+  TreeNodeBase* fake_;
 
-    BSTConstIterator operator++(int)
-    {
-      BSTConstIterator temp(*this);
-      ++(*this);
-      return temp;
-    }
+  template<class K, class V>
+  friend class BSTConstIterator;
 
-    bool operator==(const BSTConstIterator& other) const noexcept
-    {
-      return current_ == other.current_;
-    }
+  template<class K, class V, class C>
+  friend class BSTree;
+};
 
-    bool operator!=(const BSTConstIterator& other) const noexcept
-    {
-      return !(*this == other);
-    }
+// =========================
+// CONST ITERATOR
+// =========================
+template< class Key, class Value >
+class BSTConstIterator
+{
+public:
+  using NodeT = TreeNode<Key, Value>;
 
-  private:
-    const smirnova::TreeNodeBase* current_;
-    const smirnova::TreeNodeBase* fake_;
+  BSTConstIterator() : current_(nullptr), fake_(nullptr) {}
 
-    template< class K, class V, class C >
-    friend class BSTree;
-  };
+  BSTConstIterator(const TreeNodeBase* current,
+                   const TreeNodeBase* fake)
+    : current_(current), fake_(fake) {}
+
+  BSTConstIterator(const BSTIterator<Key, Value>& other)
+    : current_(other.current_), fake_(other.fake_) {}
+
+  const std::pair<Key, Value>& operator*() const
+  {
+    if (current_ == fake_)
+      throw std::runtime_error("bad iterator");
+
+    return static_cast<const NodeT*>(current_)->data_;
+  }
+
+  const std::pair<Key, Value>* operator->() const
+  {
+    return &static_cast<const NodeT*>(current_)->data_;
+  }
+
+  BSTConstIterator& operator++()
+  {
+    if (current_ != fake_)
+      current_ = nextNodeBase(
+        const_cast<TreeNodeBase*>(current_),
+        const_cast<TreeNodeBase*>(fake_)
+      );
+
+    return *this;
+  }
+
+  BSTConstIterator operator++(int)
+  {
+    BSTConstIterator tmp(*this);
+    ++(*this);
+    return tmp;
+  }
+
+  bool operator==(const BSTConstIterator& other) const noexcept
+  {
+    return current_ == other.current_;
+  }
+
+  bool operator!=(const BSTConstIterator& other) const noexcept
+  {
+    return !(*this == other);
+  }
+
+private:
+  const TreeNodeBase* current_;
+  const TreeNodeBase* fake_;
+
+  template<class K, class V, class C>
+  friend class BSTree;
+};
+
 }
 
 #endif
