@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <utility>
 
+#include "tree-iter.hpp"
+
 namespace smirnova
 {
   template< class T >

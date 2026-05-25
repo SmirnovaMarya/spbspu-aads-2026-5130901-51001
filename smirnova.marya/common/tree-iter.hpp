@@ -4,8 +4,6 @@
 #include <stdexcept>
 #include <utility>
 
-#include "bstree_impl.hpp"
-
 namespace smirnova
 {
   struct TreeNodeBase;

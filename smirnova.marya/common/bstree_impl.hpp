@@ -1,8 +1,6 @@
 #ifndef BSTREE_IMPL_HPP
 #define BSTREE_IMPL_HPP
 
-#include "bstree.hpp"
-
 namespace smirnova
 {
   template< class NodeT >
