@@ -8,6 +8,15 @@
 
 namespace smirnova
 {
+  template< class T >
+  struct Less
+  {
+    bool operator()(const T& left, const T& right) const
+    {
+      return left < right;
+    }
+  };
+
   struct TreeNodeBase
   {
     TreeNodeBase* parent_;
@@ -54,7 +63,7 @@ namespace smirnova
 
   TreeNodeBase* getMin(TreeNodeBase* node, TreeNodeBase* fake);
 
-  template< class Key, class Value >
+  template< class Key, class Value, class Compare = Less< Key > >
   class BSTree
   {
   public:
@@ -68,13 +77,15 @@ namespace smirnova
     BSTree():
       root_(nullptr),
       fake_leaf_(makeFakeLeaf< NodeT >()),
-      size_(0)
+      size_(0),
+      compare_()
     {}
 
     BSTree(const BSTree& other):
       root_(nullptr),
       fake_leaf_(makeFakeLeaf< NodeT >()),
-      size_(other.size_)
+      size_(other.size_),
+      compare_(other.compare_)
     {
       root_ = copy(other.root_, fake_leaf_, other.fake_leaf_);
     }
@@ -82,7 +93,8 @@ namespace smirnova
     BSTree(BSTree&& other) noexcept:
       root_(other.root_),
       fake_leaf_(other.fake_leaf_),
-      size_(other.size_)
+      size_(other.size_),
+      compare_(std::move(other.compare_))
     {
       other.root_ = nullptr;
       other.fake_leaf_ = makeFakeLeaf< NodeT >();
@@ -151,11 +163,11 @@ namespace smirnova
     TreeNodeBase* root_;
     TreeNodeBase* fake_leaf_;
     size_t size_;
+    Compare compare_;
 
     void clear(TreeNodeBase* node) noexcept;
 
-    TreeNodeBase* copy(
-      TreeNodeBase* other,
+    TreeNodeBase* copy(TreeNodeBase* other,
       TreeNodeBase* parent,
       TreeNodeBase* otherFake
     );
@@ -179,3 +191,4 @@ namespace smirnova
 #include "bstree_impl.hpp"
 
 #endif
+

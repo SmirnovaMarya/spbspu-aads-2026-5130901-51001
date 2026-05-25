@@ -4,13 +4,15 @@
 #include <stdexcept>
 #include <utility>
 
-// `TreeNodeBase` defined in `bstree.hpp`; included by TUs that include this file
-
 namespace smirnova
 {
-  
+  struct TreeNodeBase;
 
-  TreeNodeBase* nextNodeBase(TreeNodeBase* node, TreeNodeBase* fake)
+  template< class Key, class Value >
+  struct TreeNode;
+
+  
+  smirnova::TreeNodeBase* nextNodeBase(smirnova::TreeNodeBase* node, smirnova::TreeNodeBase* fake)
   {
     if (node->right_ != fake)
     {
@@ -24,7 +26,7 @@ namespace smirnova
       return node;
     }
 
-    TreeNodeBase* parent = node->parent_;
+    smirnova::TreeNodeBase* parent = node->parent_;
 
     while (parent != fake && node == parent->right_)
     {
@@ -42,14 +44,14 @@ namespace smirnova
   class BSTIterator
   {
   public:
-    using NodeT = Node< Key, Value >;
+    using NodeT = TreeNode< Key, Value >;
 
     BSTIterator():
       current_(nullptr),
       fake_(nullptr)
     {}
 
-    BSTIterator(TreeNodeBase* current, TreeNodeBase* fake):
+    BSTIterator(smirnova::TreeNodeBase* current, smirnova::TreeNodeBase* fake):
       current_(current),
       fake_(fake)
     {}
@@ -97,13 +99,13 @@ namespace smirnova
     }
 
   private:
-    TreeNodeBase* current_;
-    TreeNodeBase* fake_;
+    smirnova::TreeNodeBase* current_;
+    smirnova::TreeNodeBase* fake_;
 
     template< class K, class V >
     friend class BSTConstIterator;
 
-    template< class K, class V >
+    template< class K, class V, class C >
     friend class BSTree;
   };
 
@@ -111,14 +113,14 @@ namespace smirnova
   class BSTConstIterator
   {
   public:
-    using NodeT = Node< Key, Value >;
+    using NodeT = TreeNode< Key, Value >;
 
     BSTConstIterator():
       current_(nullptr),
       fake_(nullptr)
     {}
 
-    BSTConstIterator(const TreeNodeBase* current, const TreeNodeBase* fake):
+    BSTConstIterator(const smirnova::TreeNodeBase* current, const smirnova::TreeNodeBase* fake):
       current_(current),
       fake_(fake)
     {}
@@ -171,10 +173,10 @@ namespace smirnova
     }
 
   private:
-    const TreeNodeBase* current_;
-    const TreeNodeBase* fake_;
+    const smirnova::TreeNodeBase* current_;
+    const smirnova::TreeNodeBase* fake_;
 
-    template< class K, class V >
+    template< class K, class V, class C >
     friend class BSTree;
   };
 }
