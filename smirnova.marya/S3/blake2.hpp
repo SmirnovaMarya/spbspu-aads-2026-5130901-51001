@@ -6,6 +6,7 @@
 
 namespace smirnova
 {
+
   template < class T >
   struct Blake2Hasher
   {
