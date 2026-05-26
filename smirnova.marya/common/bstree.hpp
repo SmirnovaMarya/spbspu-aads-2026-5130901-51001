@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <utility>
 
+#include "treeNode.hpp"
 #include "tree-iter.hpp"
 
 namespace smirnova

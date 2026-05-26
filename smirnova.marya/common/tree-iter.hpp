@@ -1,26 +1,22 @@
-#pragma once
 #ifndef TREEITERATORS_HPP
 #define TREEITERATORS_HPP
 
 #include <stdexcept>
 #include <utility>
 
-#include "bstree.hpp"
+#include "treeNode.hpp"
 
 namespace smirnova
 {
+  template< class Key, class Value >
+  class BSTConstIterator;
 
-// =========================
-// forward decl (уже есть в bstree.hpp, но безопасно)
-// =========================
-struct TreeNodeBase;
-
-class BSTConstIterator;
-
+  template< class Key, class Value, class Compare >
+  class BSTree;
 // =========================
 // NEXT NODE (INORDER SUCCESSOR)
 // =========================
-inline TreeNodeBase* nextNodeBase(TreeNodeBase* node, TreeNodeBase* fake)
+TreeNodeBase* nextNodeBase(TreeNodeBase* node, TreeNodeBase* fake)
 {
   if (node == fake)
     return fake;
