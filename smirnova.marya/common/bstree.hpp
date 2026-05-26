@@ -20,19 +20,6 @@ namespace smirnova
     }
   };
 
-  struct TreeNodeBase
-  {
-    TreeNodeBase* parent_;
-    TreeNodeBase* left_;
-    TreeNodeBase* right_;
-
-    TreeNodeBase():
-      parent_(nullptr),
-      left_(nullptr),
-      right_(nullptr)
-    {}
-  };
-
   template< class Key, class Value >
   struct TreeNode: TreeNodeBase
   {

@@ -18,13 +18,35 @@ namespace smirnova
     {}
   };
 
-  template< class Key, class Value >
+  template< typename Key, typename Value >
   struct TreeNode:
     TreeNodeBase
   {
-    std::pair<Key, Value> data_;
+    std::pair< Key, Value > data_;
 
-    TreeNode(const std::pair<Key, Value>& data):
+    // Конструктор для fake leaf
+    TreeNode():
+      TreeNodeBase(),
+      data_()
+    {}
+
+    // Основной конструктор узла
+    TreeNode(
+      const Key& key,
+      const Value& value,
+      TreeNodeBase* parent
+    ):
+      TreeNodeBase(),
+      data_(key, value)
+    {
+      parent_ = parent;
+      left_ = nullptr;
+      right_ = nullptr;
+    }
+
+    // Дополнительный конструктор
+    TreeNode(const std::pair< Key, Value >& data):
+      TreeNodeBase(),
       data_(data)
     {}
   };
