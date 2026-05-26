@@ -8,6 +8,7 @@
 
 namespace smirnova
 {
+
   template< class Key, class Value >
   class BSTConstIterator;
 
