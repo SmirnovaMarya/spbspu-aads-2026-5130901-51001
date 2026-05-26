@@ -16,6 +16,7 @@ namespace smirnova
 // =========================
 // NEXT NODE (INORDER SUCCESSOR)
 // =========================
+
 TreeNodeBase* nextNodeBase(TreeNodeBase* node, TreeNodeBase* fake)
 {
   if (node == fake)
