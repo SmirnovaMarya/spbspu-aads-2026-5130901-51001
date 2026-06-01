@@ -14,9 +14,6 @@ namespace smirnova
 
   template< class Key, class Value, class Compare >
   class BSTree;
-// =========================
-// NEXT NODE (INORDER SUCCESSOR)
-// =========================
 
 TreeNodeBase* nextNodeBase(TreeNodeBase* node, TreeNodeBase* fake)
 {
