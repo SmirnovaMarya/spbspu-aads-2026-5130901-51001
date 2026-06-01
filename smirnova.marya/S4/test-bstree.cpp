@@ -9,7 +9,7 @@
 
 using Tree = smirnova::BSTree< int, std::string, smirnova::Less< int > >;
 
-Tree makeTree(std::initializer_list< std::pair < int, const char* > > items)
+static Tree makeTree(std::initializer_list< std::pair < int, const char* > > items)
 {
   Tree tree;
 

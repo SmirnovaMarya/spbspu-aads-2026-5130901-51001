@@ -144,14 +144,9 @@ void smirnova::Vector< T >::ensureCapacity()
   {
     return;
   }
-  if (cap == 0)
-  {
-    size_t newCap =  2;
-  }
-  else
-  {
-    size_t newCap =  cap * 2;
-  }
+
+  size_t newCap = (cap == 0) ? 2 : cap * 2;
+
   expansion(newCap);
 }
 
