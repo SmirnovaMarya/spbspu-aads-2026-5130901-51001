@@ -20,7 +20,6 @@ namespace smirnova
     }
   };
 
-  // `TreeNode` is defined in treeNode.hpp; use that definition here.
   template< class Key, class Value >
   using Node = TreeNode< Key, Value >;
 

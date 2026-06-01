@@ -3,7 +3,7 @@
 
 namespace smirnova
 {
-  template < typename T >
+  template < class T >
   struct VectorIterator
   {
     T* ptr;
@@ -16,7 +16,7 @@ namespace smirnova
     bool operator!=(const VectorIterator& other) const;
   };
 
-  template < typename T >
+  template < class T >
   struct ConstVectorIterator
   {
     const T* ptr;
@@ -31,61 +31,61 @@ namespace smirnova
 
 }
 
-template < typename T >
+template < class T >
 smirnova::VectorIterator< T >::VectorIterator(T* p):
   ptr(p)
 {}
 
-template < typename T >
+template < class T >
 T& smirnova::VectorIterator< T >::operator*()
 {
   return *ptr;
 }
 
-template < typename T >
+template < class T >
 T* smirnova::VectorIterator< T >::operator->()
 {
   return ptr;
 }
 
-template < typename T >
+template < class T >
 smirnova::VectorIterator< T >& smirnova::VectorIterator< T >::operator++()
 {
   ++ptr;
   return *this;
 }
 
-template < typename T >
+template < class T >
 bool smirnova::VectorIterator<T>::operator!=(const VectorIterator& other) const
 {
   return ptr != other.ptr;
 }
 
-template < typename T >
+template < class T >
 smirnova::ConstVectorIterator< T >::ConstVectorIterator(const T* p):
   ptr(p)
 {}
 
-template < typename T >
+template < class T >
 const T& smirnova::ConstVectorIterator< T >::operator*() const
 {
   return *ptr;
 }
 
-template < typename T >
+template < class T >
 const T* smirnova::ConstVectorIterator< T >::operator->() const
 {
   return ptr;
 }
 
-template < typename T >
+template < class T >
 smirnova::ConstVectorIterator< T >& smirnova::ConstVectorIterator< T >::operator++()
 {
   ++ptr;
   return *this;
 }
 
-template <typename T>
+template < class T >
 bool smirnova::ConstVectorIterator< T >::operator!=(const ConstVectorIterator& other) const
 {
   return ptr != other.ptr;

@@ -22,15 +22,17 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  using Dict = smirnova::BSTree<int, std::string, smirnova::Less<int>>;
-  smirnova::BSTree<std::string, Dict, smirnova::Less<std::string>> datasets;
+  using Dict = smirnova::BSTree< int, std::string, smirnova::Less< int > >;
+  smirnova::BSTree< std::string, Dict, smirnova::Less<std::string > > datasets;
 
   std::string line;
 
   while (std::getline(input, line))
   {
     if (line.empty())
+    {
       continue;
+    }
 
     std::istringstream iss(line);
 
@@ -53,7 +55,9 @@ int main(int argc, char* argv[])
   while (std::getline(std::cin, line))
   {
     if (line.empty())
+    {
       continue;
+    }
 
     try
     {

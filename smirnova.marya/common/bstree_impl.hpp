@@ -38,7 +38,7 @@ namespace smirnova
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::iterator BSTree< Key, Value, Compare >::begin() noexcept
+  BSTIterator< Key, Value > BSTree< Key, Value, Compare >::begin() noexcept
   {
     if (!root_)
     {
@@ -49,25 +49,25 @@ namespace smirnova
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::iterator BSTree< Key, Value, Compare >::end() noexcept
+  BSTIterator< Key, Value > BSTree< Key, Value, Compare >::end() noexcept
   {
     return iterator(fake_leaf_, fake_leaf_);
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::const_iterator BSTree< Key, Value, Compare >::begin() const noexcept
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::begin() const noexcept
   {
     return cbegin();
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::const_iterator BSTree< Key, Value, Compare >::end() const noexcept
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::end() const noexcept
   {
     return cend();
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree<Key, Value, Compare>::const_iterator BSTree< Key, Value, Compare >::cbegin() const noexcept
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::cbegin() const noexcept
   {
     if (!root_)
     {
@@ -79,7 +79,7 @@ namespace smirnova
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::const_iterator BSTree< Key, Value, Compare >::cend() const noexcept
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::cend() const noexcept
   {
     return const_iterator(fake_leaf_, fake_leaf_);
   }
@@ -93,7 +93,7 @@ namespace smirnova
   template< class Key, class Value, class Compare >
   void BSTree<Key, Value, Compare>::push(const Key& key, const Value& value)
   {
-    using NodeT = typename BSTree< Key, Value, Compare >::NodeT;
+    using NodeT = Node< Key, Value >;
 
     if (!root_)
     {
@@ -154,7 +154,7 @@ namespace smirnova
   template< class Key, class Value, class Compare >
   Value& BSTree< Key, Value, Compare >::get(const Key& key)
   {
-    using NodeT = typename BSTree< Key, Value, Compare >::NodeT;
+    using NodeT = Node< Key, Value >;
 
     NodeT* node = findNode(key);
 
@@ -169,7 +169,7 @@ namespace smirnova
   template< class Key, class Value, class Compare >
   const Value& BSTree< Key, Value, Compare >::get(const Key& key) const
   {
-    using NodeT = typename BSTree< Key, Value, Compare >::NodeT;
+    using NodeT = Node< Key, Value >;
 
     NodeT* node = findNode(key);
 
@@ -184,7 +184,7 @@ namespace smirnova
   template< class Key, class Value, class Compare >
   Value BSTree< Key, Value, Compare >::drop(const Key& key)
   {
-    using NodeT = typename BSTree< Key, Value, Compare >::NodeT;
+    using NodeT = Node< Key, Value >;
 
     NodeT* node = findNode(key);
 
@@ -248,25 +248,25 @@ namespace smirnova
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::iterator BSTree< Key, Value, Compare >::rotateLeft(iterator it)
+  BSTIterator< Key, Value > BSTree< Key, Value, Compare >::rotateLeft(iterator it)
   {
     return iterator(rotateLeftNode(it.current_), fake_leaf_);
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::iterator BSTree< Key, Value, Compare >::rotateRight(iterator it)
+  BSTIterator< Key, Value > BSTree< Key, Value, Compare >::rotateRight(iterator it)
   {
     return iterator(rotateRightNode(it.current_), fake_leaf_);
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::iterator BSTree< Key, Value, Compare >::rotateLargeLeft(iterator it)
+  BSTIterator< Key, Value > BSTree< Key, Value, Compare >::rotateLargeLeft(iterator it)
   {
     return iterator(rotateLargeLeftNode(it.current_), fake_leaf_);
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::iterator BSTree< Key, Value, Compare >::rotateLargeRight(iterator it)
+  BSTIterator< Key, Value > BSTree< Key, Value, Compare >::rotateLargeRight(iterator it)
   {
     return iterator(rotateLargeRightNode(it.current_), fake_leaf_);
   }
@@ -274,7 +274,7 @@ namespace smirnova
   template< class Key, class Value, class Compare >
   void BSTree< Key, Value, Compare >::clear(TreeNodeBase* node) noexcept
   {
-    using NodeT = typename BSTree< Key, Value, Compare >::NodeT;
+    using NodeT = Node< Key, Value >;
 
     if (!node || node == fake_leaf_)
     {
@@ -294,7 +294,7 @@ namespace smirnova
     TreeNodeBase* otherFake
   )
   {
-    using NodeT = typename BSTree< Key, Value, Compare >::NodeT;
+    using NodeT = Node< Key, Value >;
 
     if (!other || other == otherFake)
     {
@@ -320,9 +320,9 @@ namespace smirnova
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::NodeT* BSTree<Key, Value, Compare>::findNode(const Key& key) const noexcept
+  Node< Key, Value >* BSTree<Key, Value, Compare>::findNode(const Key& key) const noexcept
   {
-    using NodeT = typename BSTree< Key, Value, Compare >::NodeT;
+    using NodeT = Node< Key, Value >;
 
     TreeNodeBase* node = root_;
 

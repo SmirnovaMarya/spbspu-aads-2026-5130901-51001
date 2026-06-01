@@ -6,7 +6,9 @@ namespace smirnova
 TreeNodeBase* nextNodeBase(TreeNodeBase* node, TreeNodeBase* fake)
 {
   if (node == fake)
+  {
     return fake;
+  }
 
   if (node->right_ != fake)
   {
@@ -27,4 +29,5 @@ TreeNodeBase* nextNodeBase(TreeNodeBase* node, TreeNodeBase* fake)
   return parent;
 }
 
-} // namespace smirnova
+}
+

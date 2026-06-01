@@ -6,21 +6,18 @@
 
 #include "../common/bstree.hpp"
 
-using Tree = smirnova::BSTree<int, std::string, smirnova::Less<int>>;
+using Tree = smirnova::BSTree< int, std::string, smirnova::Less< int > >;
 
-namespace
+Tree makeTree(std::initializer_list< std::pair< int, const char* > > items)
 {
-  Tree makeTree(std::initializer_list< std::pair< int, const char* > > items)
+  Tree tree;
+
+  for (const auto& item : items)
   {
-    Tree tree;
-
-    for (const auto& item : items)
-    {
-      tree.push(item.first, item.second);
-    }
-
-    return tree;
+    tree.push(item.first, item.second);
   }
+
+  return tree;
 }
 
 BOOST_AUTO_TEST_CASE(iterator_test)

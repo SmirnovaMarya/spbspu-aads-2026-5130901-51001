@@ -123,9 +123,7 @@ namespace smirnova
       return;
     }
 
-    if (command == "complement" ||
-        command == "intersect" ||
-        command == "union")
+    if (command == "complement" || command == "intersect" || command == "union")
     {
       std::string newDatasetName;
       std::string leftName;
@@ -143,24 +141,15 @@ namespace smirnova
 
       if (command == "complement")
       {
-        datasets.push(
-          newDatasetName,
-          complement(left, right)
-        );
+        datasets.push(newDatasetName, complement(left, right));
       }
       else if (command == "intersect")
       {
-        datasets.push(
-          newDatasetName,
-          intersect(left, right)
-        );
+        datasets.push(newDatasetName, intersect(left, right));
       }
       else
       {
-        datasets.push(
-          newDatasetName,
-          unionDict(left, right)
-        );
+        datasets.push(newDatasetName, unionDict(left, right));
       }
 
       return;

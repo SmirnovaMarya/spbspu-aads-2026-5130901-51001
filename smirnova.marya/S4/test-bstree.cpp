@@ -7,33 +7,31 @@
 
 #include "../common/bstree.hpp"
 
-using Tree = smirnova::BSTree<int, std::string, smirnova::Less<int>>;
+using Tree = smirnova::BSTree< int, std::string, smirnova::Less< int > >;
 
-namespace
+Tree makeTree(std::initializer_list< std::pair < int, const char* > > items)
 {
-  Tree makeTree(std::initializer_list< std::pair< int, const char* > > items)
+  Tree tree;
+
+  for (const auto& item : items)
   {
-    Tree tree;
-
-    for (const auto& item : items)
-    {
-      tree.push(item.first, item.second);
-    }
-
-    return tree;
+    tree.push(item.first, item.second);
   }
 
-  Tree::iterator find(Tree& tree, int key)
-  {
-    for (auto it = tree.begin(); it != tree.end(); ++it)
-    {
-      if (it->first == key)
-        return it;
-    }
+  return tree;
+}
 
-    return tree.end();
+Tree::iterator find(Tree& tree, int key)
+{
+  for (auto it = tree.begin(); it != tree.end(); ++it)
+  {
+    if (it->first == key)
+    {
+      return it;
+    }
   }
 
+  return tree.end();
 }
 
 BOOST_AUTO_TEST_CASE(default_constructor_test)
