@@ -42,7 +42,9 @@ namespace smirnova
     }
 
     Vector(Vector&& other) noexcept:
-      data(other.data), sz(other.sz), cap(other.cap)
+      data(other.data),
+      sz(other.sz),
+      cap(other.cap)
     {
       other.data = 0;
       other.sz = 0;
