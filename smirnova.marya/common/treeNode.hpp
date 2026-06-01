@@ -24,18 +24,14 @@ namespace smirnova
   {
     std::pair< Key, Value > data_;
 
-    // Конструктор для fake leaf
+    // default — нужен для fake leaf
     TreeNode():
       TreeNodeBase(),
       data_()
     {}
 
-    // Основной конструктор узла
-    TreeNode(
-      const Key& key,
-      const Value& value,
-      TreeNodeBase* parent
-    ):
+    // основной конструктор
+    TreeNode(const Key& key, const Value& value, TreeNodeBase* parent):
       TreeNodeBase(),
       data_(key, value)
     {
@@ -43,12 +39,6 @@ namespace smirnova
       left_ = nullptr;
       right_ = nullptr;
     }
-
-    // Дополнительный конструктор
-    TreeNode(const std::pair< Key, Value >& data):
-      TreeNodeBase(),
-      data_(data)
-    {}
   };
 }
 
