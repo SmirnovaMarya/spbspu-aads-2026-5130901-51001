@@ -3,7 +3,8 @@
 
 namespace smirnova
 {
-  List< Seq > readSequences(std::istream& in) {
+  List< Seq > readSequences(std::istream& in)
+  {
     List< Seq > sequences;
     std::string line;
     while (std::getline(in, line)) {
