@@ -3,10 +3,9 @@
 
 #include "seq.hpp"
 
-namespace smirnova {
-
-bool processSequences(const List<Seq>& sequences);
-
+namespace smirnova
+{
+  bool processSequences(const List<Seq>& sequences);
 }
 
 #endif

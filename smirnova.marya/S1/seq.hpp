@@ -4,14 +4,13 @@
 #include <string>
 #include "../common/list.hpp"
 
-namespace smirnova {
-
-struct Seq
+namespace smirnova
 {
-  std::string name;
-  List< size_t > numbers;
-};
-
+  struct Seq
+  {
+    std::string name;
+    List< size_t > numbers;
+  };
 }
 
 #endif

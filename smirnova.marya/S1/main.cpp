@@ -4,9 +4,10 @@
 
 int main() {
   using namespace smirnova;
-
   List<Seq> sequences = readSequences(std::cin);
-  if (!processSequences(sequences)) return 1;
+  if (!processSequences(sequences)) {
+    return 1;
+  }
   return 0;
 }
 
