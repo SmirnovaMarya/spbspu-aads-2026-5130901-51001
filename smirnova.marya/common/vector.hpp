@@ -8,7 +8,7 @@
 
 namespace smirnova
 {
-  template < typename T >
+  template < class T >
   class Vector
   {
   private:
@@ -21,11 +21,15 @@ namespace smirnova
 
   public:
     Vector():
-      data(0), sz(0), cap(0)
+      data(0),
+      sz(0),
+      cap(0)
     {}
 
     Vector(const Vector& other):
-      data(0), sz(other.sz), cap(other.cap)
+      data(0),
+      sz(other.sz),
+      cap(other.cap)
     {
       if (cap)
       {
@@ -38,7 +42,9 @@ namespace smirnova
     }
 
     Vector(Vector&& other) noexcept:
-      data(other.data), sz(other.sz), cap(other.cap)
+      data(other.data),
+      sz(other.sz),
+      cap(other.cap)
     {
       other.data = 0;
       other.sz = 0;
@@ -95,28 +101,29 @@ namespace smirnova
 
 }
 
-template < typename T >
+template < class T >
 size_t smirnova::Vector< T >::size() const
 {
   return sz;
 }
 
-template < typename T >
+template < class T >
 T& smirnova::Vector< T >::operator[](size_t i)
 {
   return data[i];
 }
 
-template < typename T >
+template < class T >
 const T& smirnova::Vector< T >::operator[](size_t i) const
 {
   return data[i];
 }
 
-template < typename T >
+template < class T >
 void smirnova::Vector< T >::expansion(size_t newCap)
 {
-  if (newCap <= cap) {
+  if (newCap <= cap)
+  {
     return;
   }
 
@@ -132,58 +139,62 @@ void smirnova::Vector< T >::expansion(size_t newCap)
   cap = newCap;
 }
 
-template < typename T >
+template < class T >
 void smirnova::Vector< T >::ensureCapacity()
 {
   if (sz < cap)
+  {
     return;
+  }
 
-  size_t newCap = (cap == 0 ? 2 : cap * 2);
+  size_t newCap = (cap == 0) ? 2 : cap * 2;
+
   expansion(newCap);
 }
 
-template < typename T >
+template < class T >
 void smirnova::Vector< T >::pushBack(const T& v)
 {
   ensureCapacity();
   data[sz++] = v;
 }
 
-template < typename T >
+template < class T >
 void smirnova::Vector< T >::pushBack(T&& v)
 {
   ensureCapacity();
   data[sz++] = std::move(v);
 }
 
-template < typename T >
+template < class T >
 void smirnova::Vector< T >::popBack()
 {
-  if (sz == 0) {
+  if (sz == 0)
+  {
     throw std::out_of_range("pop_back on empty vector");
   }
   --sz;
 }
 
-template < typename T >
+template < class T >
 smirnova::VectorIterator< T > smirnova::Vector< T >::begin()
 {
   return VectorIterator< T >(data);
 }
 
-template < typename T >
+template < class T >
 smirnova::VectorIterator< T > smirnova::Vector< T >::end()
 {
   return VectorIterator< T >(data + sz);
 }
 
-template < typename T >
+template < class T >
 smirnova::ConstVectorIterator< T > smirnova::Vector< T >::begin() const
 {
   return ConstVectorIterator< T >(data);
 }
 
-template < typename T >
+template < class T >
 smirnova::ConstVectorIterator< T > smirnova::Vector< T >::end() const
 {
   return ConstVectorIterator< T >(data + sz);

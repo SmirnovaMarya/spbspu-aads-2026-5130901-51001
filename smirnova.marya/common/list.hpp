@@ -10,7 +10,7 @@
 
 namespace smirnova
 {
-  template < typename T >
+  template < class T >
   struct Node
   {
     T data;
@@ -30,13 +30,13 @@ namespace smirnova
     {}
   };
 
-  template < typename T >
+  template < class T >
   class LIter;
 
-  template < typename T >
+  template < class T >
   class LCIter;
 
-  template < typename T >
+  template < class T >
   class List
   {
   private:
@@ -262,7 +262,7 @@ namespace smirnova
     }
   };
 
-  template < typename T >
+  template < class T >
   class LIter
   {
   private:
@@ -304,7 +304,7 @@ namespace smirnova
     }
   };
 
-  template < typename T >
+  template < class T >
   class LCIter
   {
   private:
