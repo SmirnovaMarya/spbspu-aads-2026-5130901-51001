@@ -18,6 +18,62 @@ namespace smirnova
       bool used = false;
       bool deleted = false;
     };
+
+    class Iterator
+    {
+    public:
+      using Table = CuckooHashTable;
+
+      Iterator(Table* t = nullptr, std::size_t i = 0):
+        table_(t),
+        index_(i)
+      {
+        skip();
+      }
+
+      Node& operator*()
+      {
+        auto p = resolve(index_);
+        return table_->bucket(p.first)[p.second];
+      }
+
+      Node* operator->()
+      {
+        return &(**this);
+      }
+
+      Iterator& operator++()
+      {
+        ++index_;
+        skip();
+        return *this;
+      }
+
+      bool operator!=(const Iterator& other) const
+      {
+        return table_ != other.table_ || index_ != other.index_;
+      }
+    private:
+      void skip()
+      {
+        if (!table_)
+        {
+          return;
+        }
+        std::size_t total = table_->capacity() * 2;
+        while (index_ < total)
+        {
+          auto p = resolve(index_);
+          auto& b = table_->bucket(p.first);
+          if (b[p.second].used && !b[p.second].deleted)
+          {
+            return;
+          }
+          ++index_;
+        }
+      }
+    }
+
   private:
     Vector< Node > table1_;
     Vector< Node > table2_;
