@@ -96,6 +96,35 @@ namespace smirnova
         }
       }
     }
+    bank.lastApproved.clear();
+    bank.approved.clear();
+    bank.rejected.clear();
+
+    for (auto it = chosen.begin(); it != chosen.end(); ++it)
+    {
+      bank.lastApproved.pushBack(it->name);
+    }
+
+    for (auto it = bank.clients.begin(); it != bank.clients.end(); ++it)
+    {
+      bool ok = false;
+      for (auto& n : bank.lastApproved)
+      {
+        if (n == it->name)
+        {
+          ok = true;
+        }
+      }
+
+      if (ok)
+      {
+        bank.approved.pushBack(it->name);
+      }
+      else
+      {
+        bank.rejected.pushBack(it->name);
+      }
+    }
   }
 }
 
