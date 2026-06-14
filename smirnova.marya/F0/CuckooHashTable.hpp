@@ -24,7 +24,11 @@ namespace smirnova
     std::size_t capacity_ = 16;
     Hash hash_;
   public:
-    std::size_t capacity() const
+    CuckooHashTable()
+    {
+      allocate(capacity_);
+    }
+    size_t capacity() const
     {
       return capacity_;
     }
@@ -47,6 +51,16 @@ namespace smirnova
     {
       return get(key) != nullptr;
     }
+  private:
+    void allocate(std::size_t n)
+    {
+      table1_.clear();
+      table2_.clear();
+      for (std::size_t i = 0; i < n; ++i)
+      {
+        table1_.pushBack(Node{});
+        table2_.pushBack(Node{});
+      }
   };
 }
 
