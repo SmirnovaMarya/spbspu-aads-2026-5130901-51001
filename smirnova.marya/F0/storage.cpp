@@ -1,37 +1,35 @@
 #include "storage.hpp"
-#include <fstream>
 
 namespace smirnova
 {
   CommandContext::CommandContext()
   {
-    loadBanks("banks.txt");
+    loadBanks();
   }
 
-  void CommandContext::loadBanks(const std::string& file)
+  void CommandContext::loadBanks()
   {
-    std::ifstream in(file);
+    Bank b;
 
-    std::string name;
-    long long limit;
-    double rate;
-    int maxTerm;
+    b.name = "Sberbank";
+    b.limit = 2000000;
+    b.rate = 1.12;
+    b.maxTermMonths = 60;
+    banks_.insert(b.name, b);
 
-    while (in >> name >> limit >> rate >> maxTerm)
-    {
-      if (rate <= 0 || limit < 0 || maxTerm <= 0)
-      {
-        continue;
-      }
+    b = Bank{};
+    b.name = "VTB";
+    b.limit = 3000000000LL;
+    b.rate = 1.13;
+    b.maxTermMonths = 60;
+    banks_.insert(b.name, b);
 
-      Bank b;
-      b.name = name;
-      b.limit = limit;
-      b.rate = rate;
-      b.maxTermMonths = maxTerm;
-
-      banks_.insert(name, b);
-    }
+    b = Bank{};
+    b.name = "Tinkoff";
+    b.limit = 2000000000LL;
+    b.rate = 1.18;
+    b.maxTermMonths = 6;
+    banks_.insert(b.name, b);
   }
 
   Bank* CommandContext::getBank(const std::string& name)

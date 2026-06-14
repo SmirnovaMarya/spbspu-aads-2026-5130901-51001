@@ -17,7 +17,7 @@ namespace smirnova
 
   public:
     CommandContext();
-    void loadBanks(const std::string& file);
+    void loadBanks();
 
     Bank* getBank(const std::string& name);
     Map& banks();
