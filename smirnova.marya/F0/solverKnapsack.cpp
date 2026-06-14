@@ -64,6 +64,38 @@ namespace smirnova
         chosen.pushBack(*it);
       }
     }
+
+    bool improved = true;
+
+    while (improved)
+    {
+      improved = false;
+      for (size_t i = 0; i < chosen.size(); ++i)
+      {
+        for (size_t j = 0; j < items.size(); ++j)
+        {
+          const auto& out = chosen[i];
+          const auto& in = items[j];
+          long long newUsed = used - out.loan + in.loan;
+          if (newUsed <= bank.limit)
+          {
+            double oldProfit = totalProfit(chosen);
+            
+            Vector< Item > test = chosen;
+            test[i] = in;
+
+            double newProfit = totalProfit(test);
+
+            if (newProfit > oldProfit)
+            {
+              chosen = test;
+              used = newUsed;
+              improved = true;
+            }
+          }
+        }
+      }
+    }
   }
 }
 
