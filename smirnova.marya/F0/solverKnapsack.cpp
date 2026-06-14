@@ -41,8 +41,8 @@ namespace smirnova
     {
       for (size_t j = i + 1; j < items.size(); ++j)
       {
-        double di = items[i].profit / (double)items[i].loan;
-        double dj = items[j].profit / (double)items[j].loan;
+        double di = items[i].profit / static_cast< double >(items[i].loan);
+        double dj = items[j].profit / static_cast< double >(items[j].loan);
 
         if (dj > di)
         {
@@ -96,9 +96,10 @@ namespace smirnova
         }
       }
     }
-    bank.lastApproved = {};
-    bank.approved = {};
-    bank.rejected = {};
+
+    bank.lastApproved.clear();
+    bank.approved.clear();
+    bank.rejected.clear();
 
     for (auto it = chosen.begin(); it != chosen.end(); ++it)
     {

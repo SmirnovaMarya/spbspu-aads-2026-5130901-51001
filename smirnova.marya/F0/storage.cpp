@@ -7,6 +7,7 @@ namespace smirnova
   {
     loadBanks("banks.txt");
   }
+
   void CommandContext::loadBanks(const std::string& file)
   {
     std::ifstream in(file);
@@ -32,6 +33,7 @@ namespace smirnova
       banks_.insert(name, b);
     }
   }
+
   Bank* CommandContext::getBank(const std::string& name)
   {
     return banks_.get(name);

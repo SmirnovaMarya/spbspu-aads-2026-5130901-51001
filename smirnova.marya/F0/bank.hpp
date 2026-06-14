@@ -16,7 +16,7 @@ namespace smirnova
 
     double minScore = 0.2;
 
-    Vector<Client> clients;
+    Vector< Client > clients;
 
     Vector< std::string > lastApproved;
     Vector< std::string > approved;

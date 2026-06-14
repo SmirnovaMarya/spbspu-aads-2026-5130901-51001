@@ -5,6 +5,8 @@
 #include "CuckooHashFunc.hpp"
 
 namespace smirnova
+{
+
   template< class Key, class Value, class Hash = DefaultHasher< Key > >
   class CuckooHashTable
   {
@@ -22,7 +24,7 @@ namespace smirnova
     public:
       using Table = CuckooHashTable;
 
-      Iterator(Table* t = nullptr, std::size_t i = 0):
+      Iterator(Table* t = nullptr, size_t i = 0):
         table_(t),
         index_(i)
       {
@@ -54,11 +56,11 @@ namespace smirnova
 
     private:
       Table* table_;
-      std::size_t index_;
+      size_t index_;
 
-      std::pair< int,std::size_t > resolve(std::size_t idx) const
+      std::pair< int,size_t > resolve(size_t idx) const
       {
-        std::size_t n = table_->capacity();
+        size_t n = table_->capacity();
 
         if (idx < n)
         {
@@ -76,7 +78,7 @@ namespace smirnova
         {
           return;
         }
-        std::size_t total = table_->capacity() * 2;
+        size_t total = table_->capacity() * 2;
         while (index_ < total)
         {
           auto p = resolve(index_);
@@ -93,7 +95,7 @@ namespace smirnova
   private:
     Vector< Node > table1_;
     Vector< Node > table2_;
-    std::size_t capacity_ = 16;
+    size_t capacity_ = 16;
     Hash hash_;
 
   public:
@@ -126,14 +128,14 @@ namespace smirnova
 
       Value* get(const Key& key)
       {
-        std::size_t i1 = hash_.h1(key) % capacity_;
+        size_t i1 = hash_.h1(key) % capacity_;
 
         if (table1_[i1].used && !table1_[i1].deleted && table1_[i1].key == key)
         {
           return &table1_[i1].value;
         }
 
-        std::size_t i2 = hash_.h2(key) % capacity_;
+        size_t i2 = hash_.h2(key) % capacity_;
 
         if (table2_[i2].used && !table2_[i2].deleted && table2_[i2].key == key)
         {
@@ -154,9 +156,9 @@ namespace smirnova
 
       double loadFactor() const
       {
-        std::size_t used = 0;
+        size_t used = 0;
 
-        for (std::size_t i = 0; i < capacity_; ++i)
+        for (size_t i = 0; i < capacity_; ++i)
         {
           if (table1_[i].used)
           {
@@ -167,10 +169,10 @@ namespace smirnova
             ++used;
           }
         }
-        return (double)used / (capacity_ * 2);
+        return static_cast< double >(used) / (capacity_ * 2);
       }
 
-      void rehash(std::size_t newCap)
+      void rehash(size_t newCap)
       {
           Vector< Node > old1 = table1_;
           Vector< Node > old2 = table2_;
@@ -203,7 +205,7 @@ namespace smirnova
           rehash(capacity_ * 2);
         }
 
-        std::size_t i1 = hash_.h1(key) % capacity_;
+        size_t i1 = hash_.h1(key) % capacity_;
 
         if (!table1_[i1].used)
         {
@@ -211,7 +213,7 @@ namespace smirnova
           return true;
         }
 
-        std::size_t i2 = hash_.h2(key) % capacity_;
+        size_t i2 = hash_.h2(key) % capacity_;
 
         if (!table2_[i2].used)
         {
@@ -223,7 +225,7 @@ namespace smirnova
 
       bool erase(const Key& key)
       {
-        std::size_t i1 = hash_.h1(key) % capacity_;
+        size_t i1 = hash_.h1(key) % capacity_;
 
         if (table1_[i1].used && table1_[i1].key == key)
         {
@@ -231,7 +233,7 @@ namespace smirnova
           return true;
         }
 
-        std::size_t i2 = hash_.h2(key) % capacity_;
+        size_t i2 = hash_.h2(key) % capacity_;
 
         if (table2_[i2].used && table2_[i2].key == key)
         {
@@ -252,12 +254,12 @@ namespace smirnova
       }
 
   private:
-    void allocate(std::size_t n)
+    void allocate(size_t n)
     {
       table1_.clear();
       table2_.clear();
 
-      for (std::size_t i = 0; i < n; ++i)
+      for (size_t i = 0; i < n; ++i)
       {
         table1_.pushBack(Node{});
         table2_.pushBack(Node{});

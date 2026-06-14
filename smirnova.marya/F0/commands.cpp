@@ -8,6 +8,7 @@
 
 namespace smirnova
 {
+
   void addClientCommand(CommandContext& ctx, std::istream& in, std::ostream& out)
   {
     std::string name, bank;

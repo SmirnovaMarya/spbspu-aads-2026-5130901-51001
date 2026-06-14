@@ -4,6 +4,7 @@
 namespace smirnova
 {
   struct Bank;
+
   class Client
   {
   public:

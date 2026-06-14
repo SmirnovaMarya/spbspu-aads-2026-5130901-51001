@@ -5,7 +5,7 @@ namespace smirnova
 {
   double Client::getRisk() const
   {
-      double dti = (double)loan / (income + 1.0);
+      double dti = static_cast< double >(loan) / (income + 1.0);
       double risk = dti * 30.0;
       if (risk > 100.0)
       {
@@ -17,7 +17,7 @@ namespace smirnova
   double Client::expectedProfit(const Bank& bank) const
   {
       double rate = bank.rate + getRisk() / 1000.0;
-      double termFactor = (double)termMonths / bank.maxTermMonths;
+      double termFactor = static_cast< double >(termMonths) / bank.maxTermMonths;
       double totalPay = loan * rate;
       totalPay *= (1.0 + termFactor * 0.2);
       return totalPay - loan;
@@ -27,7 +27,7 @@ namespace smirnova
   {
       double profit = expectedProfit(bank);
       double riskPenalty = (100.0 - getRisk()) / 100.0;
-      double termPenalty = 1.0 / (1.0 + termMonths / 12.0);
+      double termPenalty = 1.0 / (1.0 + static_cast< double >(termMonths) / 12.0);
       return profit * riskPenalty * termPenalty;
   }
 }
