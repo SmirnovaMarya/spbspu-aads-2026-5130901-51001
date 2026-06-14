@@ -65,41 +65,27 @@ namespace smirnova
       }
     }
 
-    bool improved = true;
+    double total = 0.0;
+    double overpay = 0.0;
+    double monthly = 0.0;
 
-    while (improved)
+    for (auto it = chosen.begin(); it != chosen.end(); ++it)
     {
-      improved = false;
-      for (size_t i = 0; i < chosen.size(); ++i)
+      for (auto cit = bank.clients.begin(); cit != bank.clients.end(); ++cit)
       {
-        for (size_t j = 0; j < items.size(); ++j)
+        if (cit->name == it->name)
         {
-          const auto& out = chosen[i];
-          const auto& in = items[j];
-          long long newUsed = used - out.loan + in.loan;
-          if (newUsed <= bank.limit)
-          {
-            double oldProfit = totalProfit(chosen);
+          double t = cit->loan * bank.rate;
+          double o = t - cit->loan;
+          double m = t / cit->termMonths;
 
-            Vector< Item > test = chosen;
-            test[i] = in;
-
-            double newProfit = totalProfit(test);
-
-            if (newProfit > oldProfit)
-            {
-              chosen = test;
-              used = newUsed;
-              improved = true;
-            }
-          }
+          total += t;
+          overpay += o;
+          monthly += m;
+          break;
         }
       }
     }
-
-    bank.lastApproved = Vector< std::string >();
-    bank.approved = Vector< std::string >();
-    bank.rejected = Vector< std::string >();
 
     for (auto it = chosen.begin(); it != chosen.end(); ++it)
     {

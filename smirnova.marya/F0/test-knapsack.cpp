@@ -13,7 +13,7 @@ namespace
   }
 }
 
-BOOST_AUTO_TEST_SUITE(BackpackTests)
+BOOST_AUTO_TEST_SUITE(KnapsackTests)
 
 BOOST_AUTO_TEST_CASE(bank_not_found)
 {
@@ -25,43 +25,60 @@ BOOST_AUTO_TEST_CASE(bank_not_found)
 
 BOOST_AUTO_TEST_CASE(single_client)
 {
-  std::string out = run("add-client A 100 50 Alpha 12\n"
-                        "solve Alpha\n");
+  std::string out = run(
+    "add-client A 100 50 Sberbank 12\n"
+    "solve Sberbank\n"
+  );
 
-  BOOST_CHECK(out.find("approved:") != std::string::npos ||
-              out.find("rejected:") != std::string::npos ||
-              out.find("solve") != std::string::npos);
+  BOOST_CHECK(out.find("solve") != std::string::npos);
+
+  BOOST_CHECK(
+    out.find("approved:") != std::string::npos ||
+    out.find("rejected:") != std::string::npos
+  );
 }
 
 BOOST_AUTO_TEST_CASE(approved_rejected_split)
 {
-  std::string out = run("add-client A 100 50 Alpha 12\n"
-                        "add-client B 200 50 Alpha 12\n"
-                        "add-client C 300 50 Alpha 12\n"
-                        "solve Alpha\n");
+  std::string out = run(
+    "add-client A 100 50 Sberbank 12\n"
+    "add-client B 200 50 Sberbank 12\n"
+    "add-client C 300 50 Sberbank 12\n"
+    "solve Sberbank\n"
+  );
 
-  BOOST_CHECK(out.find("approved:") != std::string::npos ||
-              out.find("rejected:") != std::string::npos ||
-              out.find("solve") != std::string::npos);
+  BOOST_CHECK(out.find("approved:") != std::string::npos);
+  BOOST_CHECK(out.find("rejected:") != std::string::npos);
 }
 
 BOOST_AUTO_TEST_CASE(limit_forces_rejection)
 {
-  std::string out = run("add-client A 100 100 Alpha 12\n"
-                        "add-client B 200 100 Alpha 12\n"
-                        "solve Alpha\n");
+  std::string out = run(
+    "add-client A 100 100 Sberbank 12\n"
+    "add-client B 200 100 Sberbank 12\n"
+    "solve Sberbank\n"
+  );
 
-  BOOST_CHECK(out.find("solve") != std::string::npos ||
-              out.find("approved:") != std::string::npos ||
+  BOOST_CHECK(out.find("approved:") != std::string::npos ||
               out.find("rejected:") != std::string::npos);
 }
 
 BOOST_AUTO_TEST_CASE(solution_exists)
 {
-  std::string out = run("add-client A 100 50 Alpha 12\n"
-                        "solve Alpha\n");
+  std::string out = run(
+    "add-client A 100 50 Sberbank 12\n"
+    "solve Sberbank\n"
+  );
 
   BOOST_CHECK(!out.empty());
+}
+
+BOOST_AUTO_TEST_CASE(solve_outputs_something)
+{
+  auto out = run("solve Sberbank\n");
+
+  BOOST_CHECK(out.find("solve") != std::string::npos ||
+              out.find("Bank not found") != std::string::npos);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

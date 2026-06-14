@@ -5,10 +5,23 @@
 #include "client.hpp"
 #include <sstream>
 #include <iostream>
+#include <fstream>
 
 namespace smirnova
 {
+  void banksCommand(CommandContext& ctx, std::istream&, std::ostream& out)
+  {
+    for (auto it = ctx.banks().begin(); it != ctx.banks().end(); ++it)
+    {
+      const Bank& b = it->value;
 
+      out << b.name
+          << " limit=" << b.limit
+          << " rate=" << b.rate
+          << " maxTerm=" << b.maxTermMonths
+          << "\n";
+    }
+  }
   void addClientCommand(CommandContext& ctx, std::istream& in, std::ostream& out)
   {
     std::string name, bank;
@@ -178,8 +191,6 @@ namespace smirnova
     if (!(in >> name >> bank))
     {
       out << "Invalid arguments\n";
-      in.clear();
-      in.ignore(10000, '\n');
       return;
     }
 
@@ -194,14 +205,19 @@ namespace smirnova
     {
       if (it->name == name)
       {
-        out << "<client " << name << ">\n"
-            << "loan=" << it->loan << "\n"
-            << "rate=" << b->rate << "\n"
-            << "months=" << it->termMonths << "\n"
-            << "total_pay=" << it->loan * b->rate << "\n";
+        double total = it->loan * b->rate;
+        double overpay = total - it->loan;
+        double monthly = total / it->termMonths;
+
+        out << b->name << " " << it->name << " "
+            << "monthly payment=" << monthly
+            << " total=" << total
+            << " overpay=" << overpay
+            << "\n";
         return;
       }
     }
+
     out << "Client not found\n";
   }
 
@@ -266,10 +282,49 @@ namespace smirnova
     out << "\n";
   }
 
+  void saveCommand(CommandContext& ctx, std::istream& in, std::ostream& out)
+  {
+    std::string file;
+
+    if (!(in >> file))
+    {
+      out << "Invalid arguments\n";
+      return;
+    }
+
+    std::ofstream os(file);
+    if (!os)
+    {
+      out << "Cannot open file\n";
+      return;
+    }
+
+    auto& map = ctx.banks();
+
+    for (auto it = map.begin(); it != map.end(); ++it)
+    {
+      const auto& bank = it->value;
+
+      for (auto cit = bank.clients.begin(); cit != bank.clients.end(); ++cit)
+      {
+        const auto& c = *cit;
+
+        os << bank.name << " "
+          << c.name << " "
+          << c.loan << " "
+          << c.income << " "
+          << c.termMonths << "\n";
+      }
+    }
+
+    out << "<saved>\n";
+  }
+
   void printHelp(std::ostream& out)
   {
     out <<
         "================ BANK SYSTEM =================\n"
+        "banks\n"
         "add-client <name income loan bank term>\n"
         "remove-client <bank name>\n"
         "list <bank>\n"
@@ -277,6 +332,7 @@ namespace smirnova
         "report <bank>\n"
         "loan-report <bank>\n"
         "solve <bank>\n"
+        "save <file>\n"
         "exit\n"
         "==============================================\n";
   }
@@ -318,7 +374,11 @@ namespace smirnova
       {
         continue;
       }
-      if (cmd == "add-client")
+      if (cmd == "banks")
+      {
+        banksCommand(ctx, ss, out);
+      }
+      else if (cmd == "add-client")
       {
         addClientCommand(ctx, ss, out);
       }
@@ -347,7 +407,10 @@ namespace smirnova
       {
         solveCommand(ctx, ss, out);
       }
-
+      else if (cmd == "save")
+      {
+        saveCommand(ctx, ss, out);
+      }
       else if (cmd == "exit")
       {
         return;
