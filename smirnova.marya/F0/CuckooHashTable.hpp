@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCKOO_HASH_TABLE_HPP
+#define CUCKOO_HASH_TABLE_HPP
 
 #include <cstddef>
 #include "../common/vector.hpp"
@@ -267,4 +268,6 @@ namespace smirnova
     }
   };
 }
+
+#endif
 

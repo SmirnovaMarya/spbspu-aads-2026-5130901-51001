@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BANK_HPP
+#define BANK_HPP
 
 #include <string>
 #include "../common/vector.hpp"
@@ -23,4 +24,6 @@ namespace smirnova
     Vector< std::string > rejected;
   };
 }
+
+#endif
 

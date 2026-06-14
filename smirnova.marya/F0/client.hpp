@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
+
 #include <string>
 
 namespace smirnova
@@ -26,4 +28,6 @@ namespace smirnova
     double score(const Bank& bank) const;
   };
 }
+
+#endif
 

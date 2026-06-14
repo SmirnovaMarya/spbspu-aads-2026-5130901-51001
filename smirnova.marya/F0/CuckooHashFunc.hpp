@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCKOO_HASH_FUNC_HPP
+#define CUCKOO_HASH_FUNC_HPP
 
 #include <cstddef>
 #include <functional>
@@ -20,4 +21,6 @@ namespace smirnova
     }
   };
 }
+
+#endif
 

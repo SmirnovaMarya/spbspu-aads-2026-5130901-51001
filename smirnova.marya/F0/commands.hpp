@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COMMANDS_HPP
+#define COMMANDS_HPP
 
 #include <string>
 #include <istream>
@@ -22,4 +23,6 @@ namespace smirnova
   void printHelp(std::ostream&);
   void executeCommands(std::istream&, std::ostream&);
 }
+
+#endif
 

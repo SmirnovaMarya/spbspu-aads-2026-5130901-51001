@@ -5,7 +5,7 @@ BOOST_AUTO_TEST_SUITE(HashTableTests)
 
 BOOST_AUTO_TEST_CASE(insert_and_get)
 {
-  smirnova::CuckooHashTable<std::string, int> map;
+  smirnova::CuckooHashTable< std::string, int > map;
   map.insert("A", 10);
   int* val = map.get("A");
   BOOST_REQUIRE(val != nullptr);
@@ -44,18 +44,14 @@ BOOST_AUTO_TEST_CASE(load_factor_basic)
 BOOST_AUTO_TEST_CASE(iteration_works)
 {
   smirnova::CuckooHashTable< std::string, int > map;
-
   map.insert("A", 1);
   map.insert("B", 2);
   map.insert("C", 3);
-
   int count = 0;
-
   for (auto it = map.begin(); it != map.end(); ++it)
   {
     ++count;
   }
-
   BOOST_CHECK(count >= 3);
 }
 
