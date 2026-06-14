@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(show_command_safe)
 {
   auto out = run("show Ivan Sberbank\n");
 
-  BOOST_CHECK(out.find("monthly payment=") != std::string::npos ||
+  BOOST_CHECK(out.find("monthly-payment=") != std::string::npos ||
               out.find("Client not found") != std::string::npos ||
               out.find("Bank not found") != std::string::npos);
 }

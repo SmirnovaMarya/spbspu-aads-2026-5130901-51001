@@ -18,7 +18,7 @@ namespace smirnova
   void loanReportCommand(CommandContext&, std::istream&, std::ostream&);
   void showCommand(CommandContext& ctx, std::istream& in, std::ostream& out);
 
-  void solveCommand(CommandContext&, std::istream&, std::ostream&);
+  void rejectedCommand(CommandContext&, std::istream&, std::ostream&);
   void saveCommand(CommandContext&, std::istream&, std::ostream&);
 
   void printHelp(std::ostream&);

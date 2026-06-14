@@ -210,7 +210,7 @@ namespace smirnova
         double monthly = total / it->termMonths;
 
         out << b->name << " " << it->name << " "
-            << "monthly payment=" << monthly
+            << "monthly-payment=" << monthly
             << " total=" << total
             << " overpay=" << overpay
             << "\n";
@@ -221,7 +221,7 @@ namespace smirnova
     out << "Client not found\n";
   }
 
-  void solveCommand(CommandContext& ctx, std::istream& in, std::ostream& out)
+  void rejectedCommand(CommandContext& ctx, std::istream& in, std::ostream& out)
   {
     std::string bankName;
 
@@ -242,9 +242,7 @@ namespace smirnova
 
     solveKnapsack(*bank);
 
-    out << "solve " << bankName << ":\n";
-
-    out << "approved: ";
+    out << bankName << ":\n";
     for (auto it = bank->clients.begin(); it != bank->clients.end(); ++it)
     {
       bool ok = false;
@@ -331,7 +329,7 @@ namespace smirnova
         "show <name bank>\n"
         "report <bank>\n"
         "loan-report <bank>\n"
-        "solve <bank>\n"
+        "rejected <bank>\n"
         "save <file>\n"
         "exit\n"
         "==============================================\n";
@@ -403,9 +401,9 @@ namespace smirnova
       {
         showCommand(ctx, ss, out);
       }
-      else if (cmd == "solve")
+      else if (cmd == "rejected")
       {
-        solveCommand(ctx, ss, out);
+        rejectedCommand(ctx, ss, out);
       }
       else if (cmd == "save")
       {

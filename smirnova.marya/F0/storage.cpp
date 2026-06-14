@@ -12,24 +12,18 @@ namespace smirnova
     Bank b;
 
     b.name = "Sberbank";
-    b.limit = 2000000;
-    b.rate = 1.12;
-    b.maxTermMonths = 60;
+    b.limit = 500;
+    b.rate = 1.1;
+    b.maxTermMonths = 24;
     banks_.insert(b.name, b);
 
     b = Bank{};
-    b.name = "VTB";
-    b.limit = 3000000000LL;
-    b.rate = 1.13;
-    b.maxTermMonths = 60;
+    b.name = "AlphaBank";
+    b.limit = 1000;
+    b.rate = 1.2;
+    b.maxTermMonths = 12;
     banks_.insert(b.name, b);
 
-    b = Bank{};
-    b.name = "Tinkoff";
-    b.limit = 2000000000LL;
-    b.rate = 1.18;
-    b.maxTermMonths = 6;
-    banks_.insert(b.name, b);
   }
 
   Bank* CommandContext::getBank(const std::string& name)

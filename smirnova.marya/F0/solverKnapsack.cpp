@@ -23,6 +23,10 @@ namespace smirnova
 
   void solveKnapsack(Bank& bank)
   {
+    bank.lastApproved = Vector<std::string>{};
+    bank.approved = Vector<std::string>{};
+    bank.rejected = Vector<std::string>{};
+
     Vector< Item > items;
 
     for (auto it = bank.clients.begin(); it != bank.clients.end(); ++it)
