@@ -5,8 +5,6 @@
 #include "CuckooHashFunc.hpp"
 
 namespace smirnova
-{
-
   template< class Key, class Value, class Hash = DefaultHasher< Key > >
   class CuckooHashTable
   {
@@ -190,7 +188,7 @@ namespace smirnova
           }
 
           for (auto& n : old2)
-          {     
+          {
             if (n.used && !n.deleted)
             {
               insert(n.key, n.value);

@@ -80,7 +80,7 @@ namespace smirnova
           if (newUsed <= bank.limit)
           {
             double oldProfit = totalProfit(chosen);
-            
+
             Vector< Item > test = chosen;
             test[i] = in;
 
