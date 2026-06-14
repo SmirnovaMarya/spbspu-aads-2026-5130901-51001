@@ -144,7 +144,7 @@ namespace smirnova
         << "rejected=" << bank->rejected.size() << "\n";
   }
 
-  void loanReportCommand(CommandContext& ctx, std::istream& in, std::ostream& out)
+  void approvedCommand(CommandContext& ctx, std::istream& in, std::ostream& out)
   {
     std::string bankName;
 
@@ -328,7 +328,7 @@ namespace smirnova
         "list <bank>\n"
         "show <name bank>\n"
         "report <bank>\n"
-        "loan-report <bank>\n"
+        "approved <bank>\n"
         "rejected <bank>\n"
         "save <file>\n"
         "exit\n"
@@ -393,9 +393,9 @@ namespace smirnova
       {
         reportCommand(ctx, ss, out);
       }
-      else if (cmd == "loan-report")
+      else if (cmd == "approved")
       {
-        loanReportCommand(ctx, ss, out);
+        approvedCommand(ctx, ss, out);
       }
       else if (cmd == "show")
       {

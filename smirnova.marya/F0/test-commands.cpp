@@ -70,26 +70,17 @@ BOOST_AUTO_TEST_CASE(show_command_safe)
               out.find("Bank not found") != std::string::npos);
 }
 
-BOOST_AUTO_TEST_CASE(solve_outputs_something)
-{
-  auto out = run("solve Sberbank\n");
-
-  BOOST_CHECK(out.find("solve") != std::string::npos ||
-              out.find("Bank not found") != std::string::npos);
-}
-
 BOOST_AUTO_TEST_CASE(stability_test)
 {
   auto out = run(
     "add-client A 100 50 Sberbank 12\n"
     "add-client B 100 50 Sberbank 12\n"
-    "solve Sberbank\n"
+    "approved Sberbank\n"
     "list Sberbank\n"
   );
 
   BOOST_CHECK(!out.empty());
 }
-
 BOOST_AUTO_TEST_CASE(save_command_writes_clients)
 {
   auto out = run(

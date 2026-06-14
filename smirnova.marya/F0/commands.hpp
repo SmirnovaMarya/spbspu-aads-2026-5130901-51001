@@ -15,7 +15,7 @@ namespace smirnova
 
   void listCommand(CommandContext&, std::istream&, std::ostream&);
   void reportCommand(CommandContext&, std::istream&, std::ostream&);
-  void loanReportCommand(CommandContext&, std::istream&, std::ostream&);
+  void approvedCommand(CommandContext&, std::istream&, std::ostream&);
   void showCommand(CommandContext& ctx, std::istream& in, std::ostream& out);
 
   void rejectedCommand(CommandContext&, std::istream&, std::ostream&);
