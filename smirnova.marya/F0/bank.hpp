@@ -1,5 +1,8 @@
+#pragma once
+
 #include <string>
 #include "../common/vector.hpp"
+#include "client.hpp"
 
 namespace smirnova
 {
@@ -12,6 +15,12 @@ namespace smirnova
     int maxTermMonths = 0;
 
     double minScore = 0.2;
+
+    Vector<Client> clients;
+
+    Vector< std::string > lastApproved;
+    Vector< std::string > approved;
+    Vector< std::string > rejected;
   };
 }
 
