@@ -167,6 +167,15 @@ namespace smirnova
       }
       return false;
     }
+    Iterator begin()
+    {
+      return Iterator(this, 0);
+    }
+
+    Iterator end()
+    {
+      return Iterator(this, capacity_ * 2);
+    }
   private:
     void allocate(size_t n)
     {
