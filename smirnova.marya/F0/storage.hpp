@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STORAGE_HPP
+#define STORAGE_HPP
 
 #include <string>
 #include "CuckooHashTable.hpp"
@@ -22,4 +23,6 @@ namespace smirnova
     Map& banks();
   };
 }
+
+#endif
 
