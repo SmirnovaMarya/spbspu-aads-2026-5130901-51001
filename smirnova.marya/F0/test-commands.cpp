@@ -34,8 +34,8 @@ BOOST_AUTO_TEST_CASE(add_client_basic)
 {
   auto out = run("add-client Ivan 1000 500 Alpha 12\n");
 
-  BOOST_CHECK(out.find("<client added>") != std::string::npos ||
-	 out.find("Bank not found") != std::string::npos);
+  BOOST_CHECK(out.find("<client added>") != std::string::npos
+    || out.find("Bank not found") != std::string::npos);
 }
 
 BOOST_AUTO_TEST_CASE(remove_client_basic)

@@ -19,8 +19,8 @@ BOOST_AUTO_TEST_CASE(bank_not_found)
 {
   std::string out = run("solve __NO_SUCH_BANK__\n");
 
-  BOOST_CHECK(out.find("Bank not found") != std::string::npos ||
-		out.find("solve") == std::string::npos);
+  BOOST_CHECK(out.find("Bank not found") != std::string::npos
+    || out.find("solve") == std::string::npos);
 }
 
 BOOST_AUTO_TEST_CASE(single_client)
