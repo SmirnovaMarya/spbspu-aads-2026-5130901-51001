@@ -53,6 +53,23 @@ namespace smirnova
       {
         return table_ != other.table_ || index_ != other.index_;
       }
+      private:
+        Table* table_;
+        std::size_t index_;
+
+        std::pair< int,std::size_t > resolve(std::size_t idx) const
+        {
+          std::size_t n = table_->capacity();
+
+          if (idx < n)
+          {
+            return std::make_pair(0, idx);
+          }
+          else
+          {
+            return std::make_pair(1, idx - n);
+          }
+      }
     private:
       void skip()
       {
@@ -166,6 +183,31 @@ namespace smirnova
         return true;
       }
       return false;
+    }
+    void rehash(std::size_t newCap)
+    {
+        Vector< Node > old1 = table1_;
+        Vector< Node > old2 = table2_;
+
+        capacity_ = newCap;
+
+        allocate(capacity_);
+
+        for (auto& n : old1)
+        {
+          if (n.used && !n.deleted)
+          {
+            insert(n.key, n.value);
+          }
+        }
+
+        for (auto& n : old2)
+        {     
+          if (n.used && !n.deleted)
+          {
+            insert(n.key, n.value);
+          }
+        }
     }
     Iterator begin()
     {
