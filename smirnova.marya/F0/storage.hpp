@@ -13,6 +13,13 @@ namespace smirnova
 
   private:
     Map banks_;
+  
+  public:
+    CommandContext();
+    void loadBanks(const std::string& file);
+
+    Bank* getBank(const std::string& name);
+    Map& banks();
   };
 }
 

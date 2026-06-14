@@ -32,5 +32,14 @@ namespace smirnova
       banks_.insert(name, b);
     }
   }
+  Bank* CommandContext::getBank(const std::string& name)
+  {
+    return banks_.get(name);
+  }
+
+  CommandContext::Map& CommandContext::banks()
+  {
+    return banks_;
+  }
 }
 
