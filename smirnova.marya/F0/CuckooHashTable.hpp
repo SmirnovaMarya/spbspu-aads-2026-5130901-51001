@@ -2,6 +2,7 @@
 #define CUCKOO_HASH_TABLE_HPP
 
 #include <cstddef>
+#include <utility>
 #include "../common/vector.hpp"
 #include "CuckooHashFunc.hpp"
 
@@ -257,8 +258,8 @@ namespace smirnova
   private:
     void allocate(size_t n)
     {
-      table1_.clear();
-      table2_.clear();
+      table1_ = Vector< Node >();
+      table2_ = Vector< Node >();
 
       for (size_t i = 0; i < n; ++i)
       {

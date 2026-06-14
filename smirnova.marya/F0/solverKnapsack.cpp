@@ -97,9 +97,9 @@ namespace smirnova
       }
     }
 
-    bank.lastApproved.clear();
-    bank.approved.clear();
-    bank.rejected.clear();
+    bank.lastApproved = Vector< std::string >();
+    bank.approved = Vector< std::string >();
+    bank.rejected = Vector< std::string >();
 
     for (auto it = chosen.begin(); it != chosen.end(); ++it)
     {
