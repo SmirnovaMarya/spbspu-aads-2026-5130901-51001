@@ -2,7 +2,7 @@
 
 #include <cstddef>
 #include "../common/vector.hpp"
-#include "CuckooHashFuck.hpp"
+#include "CuckooHashFunc.hpp"
 
 namespace smirnova
 {
@@ -53,24 +53,25 @@ namespace smirnova
       {
         return table_ != other.table_ || index_ != other.index_;
       }
-      private:
-        Table* table_;
-        std::size_t index_;
 
-        std::pair< int,std::size_t > resolve(std::size_t idx) const
-        {
-          std::size_t n = table_->capacity();
-
-          if (idx < n)
-          {
-            return std::make_pair(0, idx);
-          }
-          else
-          {
-            return std::make_pair(1, idx - n);
-          }
-      }
     private:
+      Table* table_;
+      std::size_t index_;
+
+      std::pair< int,std::size_t > resolve(std::size_t idx) const
+      {
+        std::size_t n = table_->capacity();
+
+        if (idx < n)
+        {
+          return std::make_pair(0, idx);
+        }
+        else
+        {
+          return std::make_pair(1, idx - n);
+        }
+      }
+
       void skip()
       {
         if (!table_)
@@ -89,145 +90,181 @@ namespace smirnova
           ++index_;
         }
       }
-    }
+    };
 
   private:
     Vector< Node > table1_;
     Vector< Node > table2_;
     std::size_t capacity_ = 16;
     Hash hash_;
+
   public:
-    CuckooHashTable()
-    {
-      allocate(capacity_);
-    }
-    size_t capacity() const
-    {
-      return capacity_;
-    }
-    Vector< Node >& bucket(int i)
-    {
-      if (i == 0)
+      CuckooHashTable()
       {
-        return table1_;
-      }
-      else
-      {
-        return table2_;
-      }
-    }
-    const Value* get(const Key& key) const
-    {
-      return const_cast< CuckooHashTable* >(this)->get(key);
-    }
-    bool contains(const Key& key) const
-    {
-      return get(key) != nullptr;
-    }
-    double loadFactor() const
-    {
-      std::size_t used = 0;
-
-      for (std::size_t i = 0; i < capacity_; ++i)
-      {
-        if (table1_[i].used)
-        {
-          ++used;
-        }
-        if (table2_[i].used)
-        {
-          ++used;
-        }
-      }
-      return (double)used / (capacity_ * 2);
-    }
-    bool erase(const Key& key)
-    {
-      std::size_t i1 = hash_.h1(key) % capacity_;
-
-      if (table1_[i1].used && table1_[i1].key == key)
-      {
-        table1_[i1].deleted = true;
-        return true;
-      }
-
-      std::size_t i2 = hash_.h2(key) % capacity_;
-
-      if (table2_[i2].used && table2_[i2].key == key)
-      {
-        table2_[i2].deleted = true;
-        return true;
-      }
-      return false;
-    }
-    bool insert(const Key& key, const Value& value)
-    {
-      if (loadFactor() > 0.7)
-      {
-        rehash(capacity_ * 2);
-      }
-
-      std::size_t i1 = hash_.h1(key) % capacity_;
-
-      if (!table1_[i1].used)
-      {
-        table1_[i1] = {key, value, true, false};
-        return true;
-      }
-
-      std::size_t i2 = hash_.h2(key) % capacity_;
-
-      if (!table2_[i2].used)
-      {
-        table2_[i2] = {key, value, true, false};
-        return true;
-      }
-      return false;
-    }
-    void rehash(std::size_t newCap)
-    {
-        Vector< Node > old1 = table1_;
-        Vector< Node > old2 = table2_;
-
-        capacity_ = newCap;
-
         allocate(capacity_);
+      }
 
-        for (auto& n : old1)
+      size_t capacity() const
+      {
+        return capacity_;
+      }
+
+      Vector< Node >& bucket(int i)
+      {
+        if (i == 0)
         {
-          if (n.used && !n.deleted)
-          {
-            insert(n.key, n.value);
-          }
+          return table1_;
+        }
+        else
+        {
+          return table2_;
+        }
+      }
+
+      const Vector< Node >& bucket(int i) const
+      {
+        return (i == 0) ? table1_ : table2_;
+      }
+
+      Value* get(const Key& key)
+      {
+        std::size_t i1 = hash_.h1(key) % capacity_;
+
+        if (table1_[i1].used && !table1_[i1].deleted && table1_[i1].key == key)
+        {
+          return &table1_[i1].value;
         }
 
-        for (auto& n : old2)
-        {     
-          if (n.used && !n.deleted)
+        std::size_t i2 = hash_.h2(key) % capacity_;
+
+        if (table2_[i2].used && !table2_[i2].deleted && table2_[i2].key == key)
+        {
+          return &table2_[i2].value;
+        }
+        return nullptr;
+      }
+
+      const Value* get(const Key& key) const
+      {
+        return const_cast< CuckooHashTable* >(this)->get(key);
+      }
+
+      bool contains(const Key& key) const
+      {
+        return get(key) != nullptr;
+      }
+
+      double loadFactor() const
+      {
+        std::size_t used = 0;
+
+        for (std::size_t i = 0; i < capacity_; ++i)
+        {
+          if (table1_[i].used)
           {
-            insert(n.key, n.value);
+            ++used;
+          }
+          if (table2_[i].used)
+          {
+            ++used;
           }
         }
-    }
-    Iterator begin()
-    {
-      return Iterator(this, 0);
-    }
+        return (double)used / (capacity_ * 2);
+      }
 
-    Iterator end()
-    {
-      return Iterator(this, capacity_ * 2);
-    }
+      void rehash(std::size_t newCap)
+      {
+          Vector< Node > old1 = table1_;
+          Vector< Node > old2 = table2_;
+
+          capacity_ = newCap;
+
+          allocate(capacity_);
+
+          for (auto& n : old1)
+          {
+            if (n.used && !n.deleted)
+            {
+              insert(n.key, n.value);
+            }
+          }
+
+          for (auto& n : old2)
+          {     
+            if (n.used && !n.deleted)
+            {
+              insert(n.key, n.value);
+            }
+          }
+      }
+
+      bool insert(const Key& key, const Value& value)
+      {
+        if (loadFactor() > 0.7)
+        {
+          rehash(capacity_ * 2);
+        }
+
+        std::size_t i1 = hash_.h1(key) % capacity_;
+
+        if (!table1_[i1].used)
+        {
+          table1_[i1] = {key, value, true, false};
+          return true;
+        }
+
+        std::size_t i2 = hash_.h2(key) % capacity_;
+
+        if (!table2_[i2].used)
+        {
+          table2_[i2] = {key, value, true, false};
+          return true;
+        }
+        return false;
+      }
+
+      bool erase(const Key& key)
+      {
+        std::size_t i1 = hash_.h1(key) % capacity_;
+
+        if (table1_[i1].used && table1_[i1].key == key)
+        {
+          table1_[i1].deleted = true;
+          return true;
+        }
+
+        std::size_t i2 = hash_.h2(key) % capacity_;
+
+        if (table2_[i2].used && table2_[i2].key == key)
+        {
+          table2_[i2].deleted = true;
+          return true;
+        }
+        return false;
+      }
+
+      Iterator begin()
+      {
+        return Iterator(this, 0);
+      }
+
+      Iterator end()
+      {
+        return Iterator(this, capacity_ * 2);
+      }
+
   private:
-    void allocate(size_t n)
+    void allocate(std::size_t n)
     {
       table1_.clear();
       table2_.clear();
+
       for (std::size_t i = 0; i < n; ++i)
       {
         table1_.pushBack(Node{});
         table2_.pushBack(Node{});
       }
+    }
   };
 }
 
