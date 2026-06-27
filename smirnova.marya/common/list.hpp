@@ -199,6 +199,54 @@ namespace smirnova
       other.count -= moved;
     }
 
+    template<class Compare = std::less<T>>
+    void merge(List& other, Compare comp = Compare())
+    {
+      auto it1 = begin();
+      auto it2 = other.begin();
+      while (it1.valid() && it2.valid())
+      {
+        if (comp(it2.value(), it1.value()))
+        {
+          auto next = it2;
+          next.next();
+
+          splice(it1, other, it2);
+
+          it2 = next;
+        }
+        else
+        {
+          it1.next();
+        }
+      }
+      splice(end(), other);
+    }
+
+    template<class Compare = std::less< T >>
+    void sort(Compare comp = Compare())
+    {
+        if (size() < 2)
+            return;
+
+        List< T > left;
+        List< T > right;
+        size_t mid = size() / 2;
+        auto it = begin();
+        for (size_t i = 0; i < mid; ++i)
+        {
+            auto next = it;
+            next.next();
+            left.splice(left.end(), *this, it);
+            it = next;
+        }
+        right.splice(right.end(), *this);
+        left.sort(comp);
+        right.sort(comp);
+        swap(left);
+        merge(right, comp);
+    }
+
     void swap(List& other) noexcept
     {
       std::swap(sentinel, other.sentinel);
