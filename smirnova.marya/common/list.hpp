@@ -42,6 +42,19 @@ namespace smirnova
   private:
     Node< T >* sentinel;
     size_t count;
+    void remove(Node< T >* node)
+    {
+      node->prev->next = node->next;
+      node->next->prev = node->prev;
+    }
+    void insertBefore(Node<T>* node, Node<T>* newNode)
+    {
+      newNode->next = node;
+      newNode->prev = node->prev;
+
+      node->prev->next = newNode;
+      node->prev = newNode;
+    }
 
   public:
     List():
@@ -113,6 +126,77 @@ namespace smirnova
         other.count = 0;
       }
       return *this;
+    }
+
+    void splice(LIter< T > pos, List& other, LIter<T> it)
+    {
+      if (!it.valid())
+      {
+        return;
+      }
+      if (this == &other && pos.node == it.node)
+      {
+        return;
+      }
+      Node< T >* node = it.node;
+      other.unlink(node);
+      --other.count;
+      insertBefore(pos.node, node);
+      ++count;
+    }
+
+    void splice(LIter< T > pos, List& other)
+    {
+      if (other.empty())
+      {
+        return;
+      }
+      Node< T >* first = other.sentinel->next;
+      Node< T >* last = other.sentinel->prev;
+      Node< T >* p = pos.node;
+      first->prev = p->prev;
+      p->prev->next = first;
+      last->next = p;
+      p->prev = last;
+      count += other.count;
+      other.sentinel->next = other.sentinel;
+      other.sentinel->prev = other.sentinel;
+      other.count = 0;
+    }
+
+    void splice(LIter<T> pos,
+            List& other,
+            LIter<T> first,
+            LIter<T> last)
+    {
+      if (first.node == last.node)
+      {
+          return;
+      }
+      if (this == &other &&
+          (pos.node == first.node || pos.node == last.node))
+      {
+          return;
+      }
+      size_t moved = 0;
+      for (LIter<T> it = first; it.node != last.node; it.next())
+      {
+          ++moved;
+      }
+      Node<T>* firstNode = first.node;
+      Node<T>* afterLast = last.node;
+      Node<T>* lastNode = afterLast->prev;
+      Node<T>* posNode = pos.node;
+
+      firstNode->prev->next = afterLast;
+      afterLast->prev = firstNode->prev;
+      firstNode->prev = posNode->prev;
+      posNode->prev->next = firstNode;
+      lastNode->next = posNode;
+      posNode->prev = lastNode;
+
+      count += moved;
+      other.count -= moved;
     }
 
     void swap(List& other) noexcept
@@ -265,6 +349,7 @@ namespace smirnova
   template < class T >
   class LIter
   {
+    friend class List< T >;
   private:
     Node< T >* node;
     Node< T >* sentinel;
@@ -307,6 +392,7 @@ namespace smirnova
   template < class T >
   class LCIter
   {
+    friend class List< T >;
   private:
     const Node< T >* node;
     const Node< T >* sentinel;
