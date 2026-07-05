@@ -139,7 +139,7 @@ namespace smirnova
         return;
       }
       Node< T >* node = it.node;
-      other.unlink(node);
+      other.remove(node);
       --other.count;
       insertBefore(pos.node, node);
       ++count;
