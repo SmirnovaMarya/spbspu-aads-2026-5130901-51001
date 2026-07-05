@@ -249,7 +249,7 @@ namespace smirnova
     }
 
     template< class P >
-    LIter< T > partition(P predicate)
+    LIter< T > partition(P pred)
     {
       List< T > falseList;
       auto it = begin();
