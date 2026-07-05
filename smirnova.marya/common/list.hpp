@@ -226,25 +226,46 @@ namespace smirnova
     template<class Compare = std::less< T >>
     void sort(Compare comp = Compare())
     {
-        if (size() < 2)
-            return;
+      if (size() < 2)
+      {
+        return;
+      }
+      List< T > left;
+      List< T > right;
+      size_t mid = size() / 2;
+      auto it = begin();
+      for (size_t i = 0; i < mid; ++i)
+      {
+        auto next = it;
+        next.next();
+        left.splice(left.end(), *this, it);
+        it = next;
+      }
+      right.splice(right.end(), *this);
+      left.sort(comp);
+      right.sort(comp);
+      swap(left);
+      merge(right, comp);
+    }
 
-        List< T > left;
-        List< T > right;
-        size_t mid = size() / 2;
-        auto it = begin();
-        for (size_t i = 0; i < mid; ++i)
+    template< class P >
+    LIter< T > partition(P predicate)
+    {
+      List< T > falseList;
+      auto it = begin();
+      while (it.valid())
+      {
+        auto next = it;
+        next.next();
+        if (!pred(it.value()))
         {
-            auto next = it;
-            next.next();
-            left.splice(left.end(), *this, it);
-            it = next;
+          falseList.splice(falseList.end(), *this, it);
         }
-        right.splice(right.end(), *this);
-        left.sort(comp);
-        right.sort(comp);
-        swap(left);
-        merge(right, comp);
+        it = next;
+      }
+      LIter< T > middle = end();
+      splice(end(), falseList);
+      return middle;
     }
 
     void swap(List& other) noexcept
